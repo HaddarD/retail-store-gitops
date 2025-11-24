@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: 630019796862.dkr.ecr.us-east-1.amazonaws.com/retail-store-cart
-  tag: latest
+  tag: "c4ec36469ad95d3eee5a3999108f4839f84d8108"
   pullPolicy: Always
 
 imagePullSecrets:
