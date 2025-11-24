@@ -1,0 +1,33 @@
+replicaCount: 1
+
+image:
+  repository: 630019796862.dkr.ecr.us-east-1.amazonaws.com/retail-store-orders
+  tag: latest
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: regcred
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+
+database:
+  endpoint: "postgresql:5432"
+  name: "catalog"
+  user: "postgres"
+  password: "postgres"
+
+rabbitmq:
+  endpoint: "rabbitmq:5672"
+  user: "guest"
+  password: "guest"

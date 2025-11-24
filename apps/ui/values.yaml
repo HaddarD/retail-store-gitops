@@ -1,0 +1,28 @@
+replicaCount: 1
+
+image:
+  repository: 630019796862.dkr.ecr.us-east-1.amazonaws.com/retail-store-ui
+  tag: latest
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: regcred
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+
+env:
+  ENDPOINTS_CATALOG: "http://catalog:80"
+  ENDPOINTS_CARTS: "http://cart:80"
+  ENDPOINTS_ORDERS: "http://orders:80"
+  ENDPOINTS_CHECKOUT: "http://checkout:80"

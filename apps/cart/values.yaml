@@ -1,0 +1,29 @@
+replicaCount: 1
+
+image:
+  repository: 630019796862.dkr.ecr.us-east-1.amazonaws.com/retail-store-cart
+  tag: latest
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: regcred
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+resources:
+  requests:
+    memory: "512Mi"
+    cpu: "250m"
+  limits:
+    memory: "512Mi"
+    cpu: "500m"
+
+dynamodb:
+  tableName: "retail-store-cart"
+  region: "us-east-1"
+
+redis:
+  endpoint: "redis-master:6379"

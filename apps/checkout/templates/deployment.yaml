@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkout
+  labels:
+    app: checkout
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: checkout
+  template:
+    metadata:
+      labels:
+        app: checkout
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: checkout
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.targetPort }}
+          env:
+            - name: ENDPOINTS_ORDERS
+              value: "{{ .Values.endpoints.orders }}"
+            - name: ENDPOINTS_CARTS
+              value: "{{ .Values.endpoints.carts }}"
+            - name: RETAIL_CHECKOUT_MESSAGING_RABBITMQ_ADDRESSES
+              value: "{{ .Values.rabbitmq.endpoint }}"
+            - name: RETAIL_CHECKOUT_MESSAGING_RABBITMQ_USERNAME
+              value: "{{ .Values.rabbitmq.user }}"
+            - name: RETAIL_CHECKOUT_MESSAGING_RABBITMQ_PASSWORD
+              value: "{{ .Values.rabbitmq.password }}"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.service.targetPort }}
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.service.targetPort }}
+            initialDelaySeconds: 30
+            periodSeconds: 30

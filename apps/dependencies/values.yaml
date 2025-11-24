@@ -1,0 +1,24 @@
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "postgres"
+    database: "catalog"
+  primary:
+    persistence:
+      enabled: false
+
+redis:
+  enabled: true
+  auth:
+    enabled: false
+  master:
+    persistence:
+      enabled: false
+
+rabbitmq:
+  enabled: true
+  auth:
+    username: "guest"
+    password: "guest"
+  persistence:
+    enabled: false

@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders
+  labels:
+    app: orders
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: orders
+  template:
+    metadata:
+      labels:
+        app: orders
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: orders
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.targetPort }}
+          env:
+            - name: RETAIL_ORDERS_PERSISTENCE_ENDPOINT
+              value: "{{ .Values.database.endpoint }}"
+            - name: RETAIL_ORDERS_PERSISTENCE_NAME
+              value: "{{ .Values.database.name }}"
+            - name: RETAIL_ORDERS_PERSISTENCE_USERNAME
+              value: "{{ .Values.database.user }}"
+            - name: RETAIL_ORDERS_PERSISTENCE_PASSWORD
+              value: "{{ .Values.database.password }}"
+            - name: RETAIL_ORDERS_MESSAGING_RABBITMQ_ADDRESSES
+              value: "{{ .Values.rabbitmq.endpoint }}"
+            - name: RETAIL_ORDERS_MESSAGING_RABBITMQ_USERNAME
+              value: "{{ .Values.rabbitmq.user }}"
+            - name: RETAIL_ORDERS_MESSAGING_RABBITMQ_PASSWORD
+              value: "{{ .Values.rabbitmq.password }}"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: {{ .Values.service.targetPort }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: {{ .Values.service.targetPort }}
+            initialDelaySeconds: 60
+            periodSeconds: 30
