@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: 630019796862.dkr.ecr.us-east-1.amazonaws.com/retail-store-checkout
-  tag: "d91aa66b93154ba5115151df0316c007ee98cb72"
+  tag: "fefa7f648eeaccaf5677b1cba0e5ab9422113d9e"
   pullPolicy: Always
 
 imagePullSecrets:
