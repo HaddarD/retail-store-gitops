@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: 630019796862.dkr.ecr.us-east-1.amazonaws.com/retail-store-orders
-  tag: "fe44efbc566ba23ff377045ad354edda39f4ca25"
+  tag: "11fee5056c5cad9afc946428db66245de866d42c"
   pullPolicy: Always
 
 imagePullSecrets:
